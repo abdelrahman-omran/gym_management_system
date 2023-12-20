@@ -12,17 +12,18 @@ public class InBody {
     private String Name;
     private String Gender;
     private int Age;
-    Date date = new Date();
+    Date date = null;
     SimpleDateFormat st= new SimpleDateFormat("yyyy/MM/dd"+"\t"+"hh:mm");
     
     
     
-    public InBody(double Weight, double Height, int Age, String Name, String Gender) {
+    public InBody(double Weight, double Height, int Age, String Name, String Gender,Date date) {
         this.Weight = Weight;
         this.Height = Height;
         this.Age = Age;
         this.Name = Name;
         this.Gender = Gender;
+        this.date = date;
     }
     
     public InBody(double Price){

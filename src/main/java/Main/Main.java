@@ -152,7 +152,17 @@ public class Main {
                         int Age = Integer.valueOf(attribute[2]);
                         String Name = attribute[4];
                         String Gender = attribute[3];
-                        inBodyList.add(new InBody(Weight,Height,Age,Name,Gender));
+                        String sDate = attribute[5];
+                        Date date =null;
+                        try{
+                            SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+                            date = dateFormat.parse(sDate);
+                        }
+                        catch(ParseException e){
+                            e.printStackTrace();
+
+                        }
+                        inBodyList.add(new InBody(Weight,Height,Age,Name,Gender,date));
                     }
                 }
                 if(line.equals("Coach"))
@@ -279,7 +289,7 @@ public class Main {
         System.out.println("Membership Length: " + membershipPlans.toArray().length);
         System.out.println("InBody Length: " + inBodyList.toArray().length);
         // Sign in & Choose Role
-        
+
         boolean run = true;
         while(run) {
             boolean nextFunction = true;

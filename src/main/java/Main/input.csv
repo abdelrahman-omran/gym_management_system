@@ -7,7 +7,7 @@ Elliptical,011,4
 Dumbbells,003,10
 Leg Press,002,2
 MembershipPlan
-John Doe,01/11/2022,3
+John Doe,01/10/2022,3
 jane Doe,15/09/2022,6
 Mark Johnson,27/03/2022,6
 Lisa Wilson,12/01/2023,3
@@ -17,12 +17,20 @@ Subscription
 2,2
 3,3
 InBody
-80,175,30,Male,John Doe
-65,160,25,Female,Jane Smith
-80,180,35,Male,Mark Johnson
-55,150,28,Female,Amy Miller
+80,175,30,Male,John Doe,01/07/2022
+78,175,30,Male,John Doe,01/08/2022
+76,175,31,Male,John Doe,01/09/2022
+65,160,25,Female,Jane Smith,20/01/2023
+68,160,25,Female,Jane Smith,20/02/2023
+70,160,25,Female,Jane Smith,20/03/2023
+80,180,35,Male,Mark Johnson,05/05/2020
+82,180,35,Male,Mark Johnson,05/06/2020
+81,180,36,Male,Mark Johnson,05/07/2020
+55,150,28,Female,Amy Miller,08/02/2021
+57,150,28,Female,Amy Miller,08/03/2021
+59,150,28,Female,Amy Miller,08/03/2021
 Coach
-Coach Smith,0,male,321 Elm St,554321,coach@example.com,8
+Coach Smith,0,male,321 Elm St,554321,coach@example.com,10
 Coach Johnson,1,male,654 Birch St,557890,coach2@example.com,10
 Coach Davis,2,male,333 Oak St,558765,coach3@example.com,9
 Coach Brown,3,male,444 Pine St,554321,coach4@example.com,7
