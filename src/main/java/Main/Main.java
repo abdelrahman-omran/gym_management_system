@@ -27,7 +27,7 @@ public class Main {
     static Map<String, Boolean> className = new HashMap<>();
     static ArrayList<Gym> gymObj = new ArrayList<>();
     static ArrayList<MembershipPlan> membershipPlans = new ArrayList<>();
-    static ArrayList<InBody> inBodyList = new ArrayList<>();
+    public static ArrayList<InBody> inBodyList = new ArrayList<>();
     public static void ReadFile(String file)
     {
         File newFile = new File(file);
@@ -197,12 +197,11 @@ public class Main {
                         String E_mail = attribute[5];
                         int coachID =  Integer.valueOf(attribute[6]);
 
-                        Gym gym = gymObj.get(0);
-                        //Subscription sub = listOfSubscriptions.get(i);
+                        Subscription sub = Gym.listOfSubscriptions.get(i);
                         i++;
 
                         Gym.listOfCustomers.add(new Customer(Name, ID, Gender,Adress,
-                                Phone_number, E_mail, coachID));
+                                Phone_number, E_mail, coachID,sub));
                     }
                 }
 
@@ -280,6 +279,7 @@ public class Main {
         System.out.println("Membership Length: " + membershipPlans.toArray().length);
         System.out.println("InBody Length: " + inBodyList.toArray().length);
         // Sign in & Choose Role
+        
         boolean run = true;
         while(run) {
             boolean nextFunction = true;
@@ -313,6 +313,7 @@ public class Main {
                     // Check password
                     if(customer != null) customer.readScenario();
                     break;
+
                 case "Coach":
                     //Scanner scan = new Scanner(System.in);
                     Coach coach =  null;

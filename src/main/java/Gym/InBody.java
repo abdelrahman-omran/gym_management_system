@@ -85,6 +85,10 @@ public class InBody {
         System.out.println("---------------------------------------------------------------------------");
         System.out.println(Name+"\t\t"+Gender+"\t\t"+Age+"\t\t"+Height+"\t\t"+Weight+"\t\t"+st.format(date)+"\n\n");
     }
+    public String getName()
+    {
+        return Name;
+    }
     
     public void Display(){
         BMR();

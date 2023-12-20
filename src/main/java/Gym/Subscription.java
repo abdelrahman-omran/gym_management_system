@@ -33,7 +33,7 @@ public class Subscription {
         this.costumer_id = costumer_id;
     }
 
-    /*public MembershipPlan getMembershipPlan() {
+    public MembershipPlan getMembershipPlan() {
         return membershipPlan;
-    }*/
+    }
 }

@@ -1,8 +1,14 @@
 package Gym;
 
 import EQ_GYM.*;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Scanner;
 import java.util.ArrayList;
+
+import static Main.Main.inBodyList;
 
 public class Customer extends Person {
     Gym gym;
@@ -20,9 +26,12 @@ public class Customer extends Person {
             int Phone_number, String E_mail, int coachID){
         super(Name, ID, Gender, Address, Phone_number, E_mail);
         this.coachID = coachID;
-
-
-        //this.subscription = sub;
+    }
+    public Customer(String Name , int ID , String Gender ,String Address,
+                    int Phone_number, String E_mail, int coachID,Subscription sub){
+        super(Name, ID, Gender, Address, Phone_number, E_mail);
+        this.coachID = coachID;
+        this.subscription = sub;
     }
     
     public Customer(Customer customer){
@@ -56,6 +65,15 @@ public class Customer extends Person {
             System.out.print("Please Enter your "+ j +" inbody");
         }
     }
+    public void addInBody()
+    {
+        for(InBody inBody: inBodyList)
+        {
+            if(inBody.getName().equals(this.Name))
+                this.List_of_inbodies.add(inBody);
+        }
+    }
+
     
     // Display coach info
     void displayCoachInfo(){
@@ -72,7 +90,7 @@ public class Customer extends Person {
     
     // Display membership plan details
     void displayMembershipPlan(){
-        //this.subscription.getMembershipPlan().display();
+        this.subscription.getMembershipPlan().display();
     }
     
     // Display inbody info at a specific date
@@ -86,12 +104,13 @@ public class Customer extends Person {
     
     // Display how many kilos need to be reduced according to his body
     void displayHowManyKilosToReduce(){
+        addInBody();
         if(this.List_of_inbodies.size() == 0){
             System.out.println("You must perform an Inbody to be able to find how many kilos you need to reduce.");
             return;
         }
         //
-        this.List_of_inbodies.get(this.List_of_inbodies.size()).howManyKilosToReduce();
+        this.List_of_inbodies.get(this.List_of_inbodies.size()-1).howManyKilosToReduce();
     }
 
     public void setGym(Gym gym) {
@@ -156,16 +175,16 @@ public class Customer extends Person {
                     displayMembershipPlan();
                     break;
                 case 4:
-                    /*System.out.print("\nEnter the date (format: yyyy-MM-dd) to display in-body information: ");
+                    System.out.print("\nEnter the date (format: yyyy-MM-dd) to display in-body information: ");
                     String dateString = scanner.next();
                     try {
-                        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
                         Date date = sdf.parse(dateString);
                         System.out.println("\nIn-Body Information at " + dateString + ":");
                         displayInBodyAtDate(date);
                     } catch (ParseException e) {
                         System.out.println("Invalid date format. Please enter a valid date.");
-                    }*/
+                    }
                     break;
                 case 5:
                     System.out.println("\nHow Many Kilos Need to be Reduced:");

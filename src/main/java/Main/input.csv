@@ -17,18 +17,18 @@ Subscription
 2,2
 3,3
 InBody
-70,175,30,Male,John Doe
+80,175,30,Male,John Doe
 65,160,25,Female,Jane Smith
-80,180,35,Male,Chris Johnson
+80,180,35,Male,Mark Johnson
 55,150,28,Female,Amy Miller
 Coach
-Coach Smith,0,Male,321 Elm St,554321,coach@example.com,8
-Coach Johnson,1,Female,654 Birch St,557890,coach2@example.com,10
-Coach Davis,2,Male,333 Oak St,558765,coach3@example.com,9
-Coach Brown,3,Female,444 Pine St,554321,coach4@example.com,7
+Coach Smith,0,male,321 Elm St,554321,coach@example.com,8
+Coach Johnson,1,male,654 Birch St,557890,coach2@example.com,10
+Coach Davis,2,male,333 Oak St,558765,coach3@example.com,9
+Coach Brown,3,male,444 Pine St,554321,coach4@example.com,7
 Customer
-John Doe,0,Male,456 Oak St,555678,john@example.com,2
-Jane Doe,1,Female,789 Pine St,558765,jane@example.com,1
-Mark Johnson,2,Male,111 Maple St,559876,mark@example.com,0
-Lisa Wilson,3,Female,222 Cedar St,556543,lisa@example.com,1
+John Doe,0,male,456 Oak St,555678,john@example.com,2
+Jane Doe,1,female,789 Pine St,558765,jane@example.com,1
+Mark Johnson,2,male,111 Maple St,559876,mark@example.com,0
+Lisa Wilson,3,female,222 Cedar St,556543,lisa@example.com,1
 Exit

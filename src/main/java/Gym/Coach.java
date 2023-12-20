@@ -1,7 +1,10 @@
 package Gym;
 
+import java.sql.SQLOutput;
 import java.util.Scanner;
 import java.util.ArrayList;
+
+import static Main.Main.inBodyList;
 
 public class Coach extends Person implements Comparable<Coach> {
     int working_hours;
@@ -25,14 +28,21 @@ public class Coach extends Person implements Comparable<Coach> {
         this.working_hours = coach.working_hours;
         
     }
-    
+    public void addCustomerToCoach()
+    {
+        for(Customer cu: Gym.listOfCustomers)
+        {
+            if(cu.coachID == this.getID())
+                this.List_of_customers.add(cu);
+        }
+    }
 
     void display (){
         System.out.println("Name: "+Name);
         System.out.println("ID:"+this.getID());
         System.out.println("Gender: " + Gender);
-        System.out.println("Adress: "+this.getAdress());
-        System.out.println("Pohne_number: "+Phone_number);
+        System.out.println("Address: "+this.getAdress());
+        System.out.println("Phone_number: "+Phone_number);
         System.out.println("E_mail: "+E_mail);
         System.out.println("Working Hours: "+working_hours);
     }
@@ -45,7 +55,7 @@ public class Coach extends Person implements Comparable<Coach> {
         while (true){
             this.working_hours =input.nextInt();
             if(this.working_hours > 10){
-                System.out.println("plese enter correct number ");
+                System.out.println("please enter correct number ");
             }
             else {
                 break;
@@ -76,22 +86,28 @@ public class Coach extends Person implements Comparable<Coach> {
      }
     
     void show_list_of_inbodies (Customer cus){
+        cus.addInBody();
          for (InBody in : cus.List_of_inbodies){         
              in.Display();     
          }
      }
      
     void show_details_of_Customer (String name){
-        System.out.println("Length: " + List_of_customers.toArray().length);
-         for (Customer cu: List_of_customers){
+        System.out.println("Length: " + Gym.listOfCustomers.toArray().length);
+         for (Customer cu: Gym.listOfCustomers){
+             if(cu.getName().equals(name)) {
                  cu.display();
+                 System.out.println("------------");
+             }
         }
     }
     
     void show_details_of_Customer_gender (String gender){
-        for (Customer cu: List_of_customers){
+        addCustomerToCoach();
+        System.out.println(this.List_of_customers.toArray().length);
+        for (Customer cu: this.List_of_customers){
             int i =1 ;
-            if(gender.equals(cu.Gender)){
+            if(gender.equals(cu.Gender) ){
                System.out.println("\t\tcustomer 1");  
                 cu.display();
                 i++;
@@ -143,7 +159,7 @@ public class Coach extends Person implements Comparable<Coach> {
 
             System.out.print("Enter your choice: ");
             int choice = scanner.nextInt();
-            //System.out.println("");
+            scanner.nextLine();
 
             switch (choice) {
                 case 1:
@@ -155,8 +171,9 @@ public class Coach extends Person implements Comparable<Coach> {
                     break;
                 case 2:
                     System.out.print("\nEnter customer name to get inbody history: ");
-                    String customerName = scanner.next();
-                    for (Customer customer : List_of_customers) {
+                    String customerName = scanner.nextLine();
+                    System.out.println(List_of_customers.toArray().length);
+                    for (Customer customer : Gym.listOfCustomers) {
                         if (customerName.equals(customer.getName())) {
                             System.out.println("\nInBody History of " + customerName + ":");
                             show_list_of_inbodies(customer);
@@ -166,13 +183,13 @@ public class Coach extends Person implements Comparable<Coach> {
                     break;
                 case 3:
                     System.out.print("\nEnter customer name to get details: ");
-                    String customerDetailsName = scanner.next();
+                    String customerDetailsName = scanner.nextLine();
                     System.out.println("\nDetails of Customer " + customerDetailsName + ":");
                     show_details_of_Customer(customerDetailsName);
                     break;
                 case 4:
                     System.out.print("\nEnter 'male' or 'female' to show customers of that gender: ");
-                    String genderChoice = scanner.next();
+                    String genderChoice = scanner.nextLine();
                     System.out.println("\nList of " + genderChoice + " Customers:");
                     show_details_of_Customer_gender(genderChoice);
                     break;
