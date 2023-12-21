@@ -1,0 +1,51 @@
+Gym
+FitnessCenter,123MainSt,5551234
+Equipment
+Treadmill,001,5
+Dumbbells,003,10
+Leg_Press,002,2
+Bike,004,4
+MembershipPlan
+John Doe,01/07/2022,3,3
+jane Doe,20/01/2023,6,4
+Mark Johnson,05/05/2020,6,4
+Lisa Wilson,08/02/2021,3,3
+Johnson Doe,02/06/2020,2,2
+Mark Doe,03/05/2020,2,2
+Subscription
+2,0
+1,1
+0,2
+1,3
+1,4
+1,5
+InBody
+80,175,30,male,John Doe,01/07/2022
+78,175,30,male,John Doe,01/08/2022
+76,175,31,male,John Doe,01/09/2022
+65,160,25,female,Jane Doe,20/01/2023
+68,160,25,female,Jane Doe,20/02/2023
+70,160,25,female,Jane Doe,20/03/2023
+80,180,35,male,Mark Johnson,05/05/2020
+82,180,35,male,Mark Johnson,05/06/2020
+81,180,36,male,Mark Johnson,05/07/2020
+55,150,28,female,Lisa Wilson,08/02/2021
+57,150,28,female,Lisa Wilson,08/03/2021
+59,150,28,female,Lisa Wilson,08/04/2021
+81,180,36,male,Johnson Doe,02/06/2020
+85,180,36,male,Johnson Doe,02/07/2020
+81,180,36,male,Mark Doe,03/05/2020
+79,180,36,male,Mark Doe,03/06/2020
+Coach
+Coach Smith,0,male,321 Elm St,554321,coach@example.com,10,pass123
+Coach Johnson,1,male,654 Birch St,557890,coach2@example.com,10,pass333
+Coach Davis,2,male,333 Oak St,558765,coach3@example.com,9,pass222
+Coach Brown,3,male,444 Pine St,554321,coach4@example.com,7,pass111
+Customer
+John Doe,0,male,456 Oak St,555678,john@example.com,2,pass000
+Jane Doe,1,female,789 Pine St,558765,jane@example.com,1,pass555
+Mark Johnson,2,male,111 Maple St,559876,mark@example.com,0,pass777
+Lisa Wilson,3,female,222 Cedar St,556543,lisa@example.com,1,pass999
+Johnson Doe,4,male,222 Pine St,553643,johnson@example.com,1,pass921
+Mark Doe,5,male,333 Cedar St,556913,markD@example.com,1,pass941
+Exit

@@ -25,11 +25,6 @@ import static Gym.Gym.listOfCoaches;
 import static Gym.Gym.sportsEquipment;*/
 
 public class Main {
-    static Map<String, Boolean> className = new HashMap<>();
-    static ArrayList<Gym> gymObj = new ArrayList<>();
-    static ArrayList<MembershipPlan> membershipPlans = new ArrayList<>();
-    public static ArrayList<InBody> inBodyList = new ArrayList<>();
-
     static Scanner input = new Scanner(System.in);
     public static Date stringToDate(String sDate)
     {
@@ -46,9 +41,9 @@ public class Main {
     }
     public static String dateToString(Date date)
     {
-            Format formatter = new SimpleDateFormat("dd/MM/yyyy");
-            String sDate = formatter.format(date);
-            return sDate;
+        Format formatter = new SimpleDateFormat("dd/MM/yyyy");
+        String sDate = formatter.format(date);
+        return sDate;
     }
 
 
@@ -169,6 +164,12 @@ public class Main {
                         String sDate = attribute[5];
                         Date date = stringToDate(sDate);
                         inBodyList.add(new InBody(Weight,Height,Age,Name,Gender,date));
+                        //
+                        for(Customer cu: Gym.listOfCustomers){
+                            if(cu.getName().equals(Name)){
+                                cu.List_of_inbodies.add(inBodyList.get(inBodyList.toArray().length-1));
+                            }
+                        }
                     }
                 }
                 if(line.equals("Coach"))
@@ -253,15 +254,15 @@ public class Main {
             outputFile.write("MembershipPlan\n");
             for(MembershipPlan mem : membershipPlans) {
                 sDate = dateToString(mem.getStart_date());
-                outputFile.write(mem.getMember_name() + ',' +sDate+ ',' + mem.getNumberOfMonths() + ',' + mem.getNumber_of_plan() + "\n");
+                outputFile.write(mem.getMember_name() + ',' +sDate+ ',' + String.valueOf(mem.getNumberOfMonths()) + ',' + mem.getNumber_of_plan() + "\n");
             }
             outputFile.write("Subscriptions\n");
             for(Subscription sub : Gym.listOfSubscriptions)
-                outputFile.write(sub.getCoach_id()+','+ sub.getCostumer_id()+','+"\n");
+                outputFile.write(String.valueOf(sub.getCoach_id())+','+ sub.getCostumer_id()+"\n");
             outputFile.write("InBody\n");
             for(InBody inbody : inBodyList) {
                 sDate = dateToString(inbody.getDate());
-                outputFile.write(inbody.getWeight() + ',' + inbody.getHeight() + ',' + inbody.getAge() + ',' + inbody.getGender() + ',' + inbody.getName() + ',' +sDate+ "\n");
+                outputFile.write(String.valueOf(inbody.getWeight())+','+String.valueOf(inbody.getHeight())+ ','+String.valueOf(inbody.getAge())+ ','+inbody.getGender()+','+inbody.getName()+ ','+sDate+ "\n");
             }
             outputFile.write("Coach\n");
             for(Coach co : Gym.listOfCoaches)
@@ -342,25 +343,25 @@ public class Main {
             System.out.println("------------");
             //
             System.out.println("You have to call an Admin Boiii");
-            String userName, pass, choice="r";
+            String userName, pass, choice = "r";
             //
-            while(true){
+            while (true) {
                 System.out.println("Enter the admin Username: ");
                 userName = input.nextLine();
                 System.out.println("Enter the admin Password: ");
                 pass = input.nextLine();
                 //
-                if(!userName.equals("Admin") || !pass.equals("Admin")){
+                if (!userName.equals("Admin") || !pass.equals("Admin")) {
                     System.out.println("Invalid Credentials, Retry(r) or Exit(e)?");
                     choice = input.nextLine();
-                    if(choice.equals("r"))
+                    if (choice.equals("r"))
                         continue;
                     else
                         break;
                 }
                 break;
             }
-            if(choice.equals("r")) {
+            if (choice.equals("r")) {
                 Admin.registerUser(role, input);
                 System.out.println("You registered successfully.");
             }
@@ -368,6 +369,12 @@ public class Main {
 
         }
     }
+
+    static Map<String, Boolean> className = new HashMap<>();
+    static ArrayList<Gym> gymObj = new ArrayList<>();
+    public static ArrayList<MembershipPlan> membershipPlans = new ArrayList<>();
+    public static ArrayList<InBody> inBodyList = new ArrayList<>();
+
 
     public static void main(String[] args) {
 
@@ -381,24 +388,9 @@ public class Main {
         className.put("InBody", true);
         className.put("Admin", true);
         className.put("Exit",true);
-        Date date = null;
-        String d = "19/12/2001";
-        try{
-            SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-            date  = dateFormat.parse(d);
-        }
 
-        catch(ParseException e){
-            e.printStackTrace();
-
-        }
-        System.out.println(date);
         ArrayList<InBody> InBodyList = new ArrayList<>();
-        String dat = "07/05/2022";
-        Date date1 = stringToDate(dat);
-        System.out.println(dat);
-        String dates = dateToString(date1);
-        System.out.println(dates);
+
         /*Gym.listOfCoaches.add(new Coach("CoacherM", 1, "male", "7 al Street", 07775000, "CoacherM@gmail.com", 8));
         Gym.listOfCoaches.add(new Coach("Coacher2F", 2, "female", "9 el Street", 07775000, "Coacher2F@gmail.com", 6));
         Gym.listOfCustomers.add(new Customer("Cu1", 101, "male", "17 Moon Street", 500090, "Customer1@hotmail.com", 2));
@@ -407,19 +399,23 @@ public class Main {
         System.out.println("First Coach Cust No = " + Gym.listOfCoaches.get(0).List_of_customers.toArray().length); // Debugging
         System.out.println("All Gym Customer number = " + Gym.listOfCustomers.toArray().length); // Debugging*/
         //
-        Scanner input = new Scanner(System.in);
+        //Scanner input = new Scanner(System.in);
         System.out.println("Enter the file path");
         String file = input.nextLine();
 
         // Read File
         ReadFile(file);
-        WriteFile();
+        //
         System.out.println("Coaches Length: " + Gym.listOfCoaches.toArray().length);
         System.out.println("Customer Length: " + Gym.listOfCustomers.toArray().length);
         System.out.println("Equipment Length: " + Gym.sportsEquipment.toArray().length);
         System.out.println("Subscription Length: " + Gym.listOfSubscriptions.toArray().length);
         System.out.println("Membership Length: " + membershipPlans.toArray().length);
         System.out.println("InBody Length: " + inBodyList.toArray().length);
+        //
+        for(Customer cu: Gym.listOfCustomers){
+           cu.addInBody();
+        }
         // Sign in & Choose Role
 
         boolean run = true;
@@ -438,9 +434,9 @@ public class Main {
                     if(start.equals("r")){
                         sign_up(input, role);
                     }
-                    else{
+                    /*else{
                         log_in(role);
-                    }
+                    }*/
                     Customer customer = (Customer)log_in(role);
                     // Check password
                     if(customer != null) customer.readScenario(input);
@@ -451,11 +447,10 @@ public class Main {
                     if(start.equals("r")){
                         sign_up(input, role);
                     }
-                    else{
+                    /*else{
                         log_in(role);
-                    }
-                    Coach coach =  null;
-                    coach = (Coach)log_in(role);
+                    }*/
+                    Coach coach = (Coach)log_in(role);
                     //
                     if(coach != null) coach.readScenario(input);
                     break;
@@ -469,7 +464,7 @@ public class Main {
                         System.out.println("Enter the admin Password: ");
                         pass = input.nextLine();
                         //
-                        if(!userName.equals("Admin") || !pass.equals("Admin")){
+                        if(!userName.equals("admin") || !pass.equals("admin")){
                             System.out.println("Invalid Credentials, Retry(r) or Exit(e)?");
                             choice = input.nextLine();
                             if(choice.equals("r"))
@@ -492,5 +487,7 @@ public class Main {
             }
         }
         // Write Output
+        WriteFile();
+        System.out.println("Good Bye...");
     }
 }

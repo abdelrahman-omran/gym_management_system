@@ -24,13 +24,13 @@ public class Gym {
     // not sure about the next methods, we can decide either to keep or delete them in the next meeting.
 
     public String getName(){
-    return name;
+        return name;
     }
     public String getAddress(){
-    return address;
+        return address;
     }
     public long getPhoneNumber(){
-    return phoneNumber;
+        return phoneNumber;
     }
     public void setName(String name){
         this.name = name;

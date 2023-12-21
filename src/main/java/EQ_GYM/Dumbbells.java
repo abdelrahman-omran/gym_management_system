@@ -3,10 +3,9 @@ package EQ_GYM;
 public class Dumbbells extends Equipment{
     double weight;
 
-
-Dumbbells(){
-    super("Dummbbels");
-}
+    Dumbbells(){
+        super("Dummbbels");
+    }
     public Dumbbells(String name,int quantity,int code){
         super(name, quantity, code);
     }
