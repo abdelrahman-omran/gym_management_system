@@ -1,38 +1,16 @@
 package Gym;
-import EQ_GYM.*;
-/**
- *
- * @author abdallah
- */
-import java.util.Date;
-import java.util.Scanner;
-import java.util.ArrayList;
+
 import EQ_GYM.Equipment;
+
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Scanner;
+import java.util.Date;
 
-public abstract class Admin extends Person{
-    
-    public enum EqType {
-        BIKE,
-        DUMBELLS,
-        TREADMILL,
-        LEGPRESS,
-        WEIGHT_BENCH
-    }
-    
-    public enum check {
-        COACH,
-        CUSTOMER
-    }
-        
-    
-    public Admin(String Name , int ID , String Gender ,String Address,
-                 int Phone_number, String E_mail){
-        super(Name, ID, Gender, Address, Phone_number, E_mail);
-    }
+public abstract class Admin {
 
-    public Date getUserDate(Scanner input){
-        int day, month, year;
+    public static Date getUserDate(Scanner input){
+        /*int day, month, year;
         System.out.println("Enter the Date you want to specify: (a single number for each value, 0 for any)");
         System.out.println("Day: ");
         day = input.nextInt();
@@ -41,32 +19,36 @@ public abstract class Admin extends Person{
         System.out.println("Year: ");
         year = input.nextInt();
         //
-        return (new Date(day, month, year));
-    }
-    
-    private boolean existCheck(int coachID, Coach coach){
-        for (Coach c: Gym.listOfCoaches) {
-            if (c.getID() == coachID) {
-                coach = c;
-                return true;
-            }
-        }
-        //
-        return false;
-    }
-        
-    private boolean existCheck(int customerID, Customer customer){
-        for (Customer c: Gym.listOfCustomers) {
-            if (c.getID() == customerID) {
-                customer = c;
-                return true;
-            }
-        }
-        //
-        return false;
+        return (new Date(day, month, year));*/
+        return new Date();
     }
 
-    public void addCoach(Scanner input) {
+    private enum userType {
+        COACH,
+        CUSTOMER
+    }
+    
+    private static Person existCheck(int ID, userType t){
+        if(t == userType.COACH){
+            for (Coach coach: Gym.listOfCoaches) {
+                if (coach.getID() == ID) {
+                    return coach;
+                }
+            }
+        }
+        else{
+            for (Customer customer: Gym.listOfCustomers) {
+                if (customer.getID() == ID) {
+                    return customer;
+                }
+            }
+        }
+
+        //
+        return null;
+    }
+
+    public static void addCoach(Scanner input) {
         System.out.println("Enter the Coach's Name:");
         String name = input.nextLine();
 
@@ -87,17 +69,19 @@ public abstract class Admin extends Person{
 
         System.out.println("Enter the Coach's Working Hours:");
         int workingHours = input.nextInt();
+        System.out.println("Enter the Coach's Top Secret Password: ");
+        String password = input.next();
 
         //
-        Gym.listOfCoaches.add(new Coach(name, id, gender, address, phoneNumber, email, workingHours));
+        Gym.listOfCoaches.add(new Coach(name, id, gender, address, phoneNumber, email, workingHours, password));
         System.out.println("Coach added successfully!");
     }
 
 
     // Edit Coach Info
-    public void editCoach(int coachID, Scanner input) {
-        Coach coachEdit = null;
-        if (!existCheck(coachID, coachEdit)) {
+    public static void editCoach(int coachID, Scanner input) {
+        Coach coachEdit = (Coach)existCheck(coachID, userType.COACH);
+        if (coachEdit == null) {
             System.out.println("No Coach was found with the provided ID");
             return;
         }
@@ -145,11 +129,22 @@ public abstract class Admin extends Person{
     }
 
     
-    public void deleteCoach(int coachID){
-        Gym.listOfCustomers.removeIf(coach -> coach.getID() == coachID);
+    public static void deleteCoach(int coachID){
+        Coach coachCheck = (Coach)existCheck(coachID,userType.COACH);
+        if(coachCheck==null){
+            System.out.println("No Coach exists with this ID.");
+            return;
+        }
+        //
+        Gym.listOfCoaches.removeIf(coach -> coach.getID() == coachID);
+        Gym.listOfCustomers.removeIf(customer -> customer.getCoachID() == coachID);
+        Gym.listOfSubscriptions.removeIf(sub -> sub.getCoach_id() == coachID);
+        //
+        System.out.println("Coach deleted successfully");
+
     }
 
-    public void addCustomer(Scanner input) {
+    public static void addCustomer(Scanner input) {
         System.out.println("Enter the Customer's Name:");
         String name = input.nextLine();
 
@@ -158,6 +153,7 @@ public abstract class Admin extends Person{
 
         System.out.println("Enter the Customer's Gender:");
         String gender = input.nextLine();
+        //input.nextLine(); // Consume the newline character
 
         System.out.println("Enter the Customer's Address:");
         String address = input.nextLine();
@@ -171,14 +167,27 @@ public abstract class Admin extends Person{
         System.out.println("Enter the ID of the Coach for the Customer:");
         int coachId = input.nextInt();
 
+        System.out.println("Enter the Customer's Top Secret Password: ");
+        String password = input.next();
+
         // Find the coach with the specified ID and add the customer to their list
         boolean coachIdCorrect=false;
         for (Coach coach : Gym.listOfCoaches) {
             if (coach.getID() == coachId) {
                 // Add the new customer to the list of Gym customers
-                Gym.listOfCustomers.add(new Customer(name, id, gender, address, phoneNumber, email, coachId));
+
                 // Add the new customer to the list of Coach customers
+                if(coach.number_of_customers > 9){
+                    System.out.println("Currently this Coach is training the Max number of customers (10)");
+                    System.out.println("Customer not added.");
+                    return;
+                }
+                // Add to all gym customers
+                Gym.listOfCustomers.add(new Customer(name, id, gender, address, phoneNumber, email, coachId, password));
+                // Add to Coach customers
                 coach.List_of_customers.add(Gym.listOfCustomers.get(Gym.listOfCustomers.toArray().length-1));
+
+                coach.number_of_customers++;
                 coachIdCorrect=true;
                 break;
             }
@@ -192,9 +201,9 @@ public abstract class Admin extends Person{
     }
 
     // Edit Customer Info
-    public void editCustomer(int customerID, Scanner input){
-        Customer customerEdit = null;
-        if(!existCheck(customerID, customerEdit)){
+    public static void editCustomer(int customerID, Scanner input){
+        Customer customerEdit = (Customer)existCheck(customerID, userType.CUSTOMER);
+        if(customerEdit==null){
             System.out.println("No Customer was found with the provided ID");
             return;
         }
@@ -246,99 +255,168 @@ public abstract class Admin extends Person{
         System.out.println("Customer information updated successfully.");
     }
     
-    public void deleteCustomer(int customerID){
+    public static void deleteCustomer(int customerID){
+        Customer customerCheck = (Customer)existCheck(customerID,userType.CUSTOMER);
+        if(customerCheck==null) {
+            System.out.println("No Customer exists with this ID.");
+            return;
+        }
+        for(Subscription sub: Gym.listOfSubscriptions){
+            if(sub.getCostumer_id() == customerID){
+                deleteSub(sub);
+            }
+        }
+        //
+        Coach coach = (Coach)existCheck(customerCheck.coachID, userType.COACH);
+        if(coach != null) coach.List_of_customers.removeIf(customer -> customer.getID() == customerID);
         Gym.listOfCustomers.removeIf(customer -> customer.getID() == customerID);
+        Gym.listOfSubscriptions.removeIf(sub -> sub.getCostumer_id() == customerID);
+        System.out.println("Customer deleted successfully.");
+
+    }
+
+    public static void deleteSub(Subscription sub){
+        Gym.listOfSubscriptions.remove(sub);
     }
 
     
-    public void addEquipment(EqType type, Equipment equipment){
+    public static void addEquipment(Scanner input){
         // Add the equipment to the gym's list
-        Gym.sportsEquipment.add(equipment);
+        Gym.sportsEquipment.add(Equipment.addEquipment(input));
     }
-    
-    public void editEquipment(Equipment equipment){
-        
+
+    public static void editEquipment(int equipmentCode, Scanner input) {
+        Equipment equipmentEdit = null;
+
+        // Check if the equipment with the provided code exists
+        for (Equipment equipment : Gym.sportsEquipment) {
+            if (equipment.getCode() == equipmentCode) {
+                equipmentEdit = equipment;
+                break;
+            }
+        }
+
+        if (equipmentEdit == null) {
+            System.out.println("No equipment was found with the provided code");
+            return;
+        }
+
+        System.out.println("Choose the information to edit:");
+        System.out.println("1. Name");
+        System.out.println("2. Quantity");
+        System.out.println("0. Cancel");
+
+        int choice = input.nextInt();
+        input.nextLine(); // Consume the newline character
+
+        switch (choice) {
+            case 1:
+                System.out.print("Enter new name: ");
+                equipmentEdit.setName(input.nextLine());
+                break;
+            case 2:
+                System.out.print("Enter new quantity: ");
+                equipmentEdit.setQuantity(input.nextInt());
+                break;
+            case 0:
+                System.out.println("Editing canceled.");
+                return;
+            default:
+                System.out.println("Invalid choice. Editing canceled.");
+                return;
+        }
+
+        System.out.println("Equipment information updated successfully.");
     }
+
     
-    public void deleteEquipment(int equipmentCode){
+    public static void deleteEquipment(int equipmentCode){
+        // search and add
         Gym.sportsEquipment.removeIf(equipment -> equipment.getCode() == equipmentCode);
     }
 
 
-/*    public void showSubscriptionHistory(int customerID){
+    public static void showSubscriptionHistory(int customerID){
         for(Subscription sub: Gym.listOfSubscriptions){
             if(sub.getCostumer_id() == customerID){
                 sub.getMembershipPlan().display();
             }
         }
-    }*/
+    }
     
     // Display all the customers that subscribed to the gym in a given month/day
-    public void displayCustomersInMonthOrDay(Date date){
-        Scanner input = new Scanner (System.in);
-        /*String c;
-        System.out.println("Month or Day? (enter m or d)");
-        c = input.nextLine();
+    public static void displayCustomersInDate(Scanner input){
+        System.out.println("Month(m) or Day(d)?");
+        String c = input.nextLine();
         if(c.equals("m")){
-            for(Subscription sub : Gym.listOfSubscriptions){
-                if(sub.getMembershipPlan().start_date.month == date.month){
-                   for(Customer customer: Gym.listOfCustomers){
-                       if(customer.Name.equals(sub.getMembershipPlan())){
-                           customer.display();
-                           break;
-                       }
-                   } 
+            System.out.println("Enter a Month: 1-12");
+            int month = input.nextInt();
+            for(Customer customer: Gym.listOfCustomers){
+                if(customer.subscription.getMembershipPlan().start_date.getMonth()+1 == month){
+                    customer.display();
+                    System.out.println("--------");
                 }
-            }
+           }
         }
         //
-        else{
-            for(Subscription sub : Gym.listOfSubscriptions){
-                if(sub.getMembershipPlan().start_date.day == date.day){
-                   for(Customer customer: Gym.listOfCustomers){
-                       if(customer.Name.equals(sub.getMembershipPlan())){
-                           customer.display();
-                           break;
-                       }
-                   } 
+        else if(c.equals("d")) {
+            System.out.println("Enter a Day: 1:31");
+            int day = input.nextInt();
+            for (Customer customer : Gym.listOfCustomers) {
+                if (customer.subscription.getMembershipPlan().start_date.getDay()+1 == day) {
+                    customer.display();
+                    System.out.println("--------");
                 }
-
             }
         }
-        */
+        else{
+            System.out.println("Invalid Choice, Out!!!");
+        }
     }
     
     // Display all the customers of a specific coach
-    public void displayCoachCustomers(int coachID){
+    public static void displayCoachCustomers(int coachID){
         for(Customer customer: Gym.listOfCustomers){
-            if(customer.subscription.getCoach_id() == coachID){
+            if(customer.getCoachID() == coachID){
                 customer.display();
+                System.out.println("--------");
             }
         }
     }
     
     // Display the GYM income in a given month
-/*    public void displayGymIncome(Date date){
+    public static void displayGymIncome(Scanner input){
         double income = 0;
+        int month, year;
+        System.out.println("Enter year: (2000-2050)");
+        year = input.nextInt();
+        System.out.println("Enter month: (1-12)");
+        month = input.nextInt();
         for(Subscription sub: Gym.listOfSubscriptions){
             MembershipPlan mem = sub.getMembershipPlan();
-            if(mem.start_date.month == date.month && mem.start_date.year == date.year){
+            if(mem.start_date.getMonth()+1 == month && mem.start_date.getYear()+1 == year){
                 income+= mem.discount_price(mem.number_of_plan);
             }
         }
-    }*/
+        //
+        System.out.println("The income in month " + month + " of the year " + year + " Was: " + income);
+    }
     
     // Display Gym Coaches, sorted descendingly according to their number of customers
-    public void displaySortedCoaches(){
-        ArrayList<Coach> sCoaches = new ArrayList<>(Gym.listOfCoaches);
-        Collections.sort(sCoaches);
+    public static void displaySortedCoaches(){
+        ArrayList<Coach> sortedCoaches = new ArrayList<>(Gym.listOfCoaches);
+
+        // Sort the coaches based on the number of customers (descending order)
+        Collections.sort(sortedCoaches);
         //
-        for(Coach coach: sCoaches){
+        for(Coach coach: sortedCoaches){
             coach.display();
+            System.out.println("No. of customers: " + coach.number_of_customers);
+            System.out.println("--------");
         }
     }
 
-    public void readScenario(Scanner input) {
+    public static void readScenario(Scanner input) {
         while (true) {
             System.out.println("Choose an action:");
             System.out.println("1. Add/Edit/Delete Coaches, Equipment, and Customers");
@@ -359,10 +437,10 @@ public abstract class Admin extends Person{
                 case 2:
                     System.out.println("Enter the Customer's ID: ");
                     int cuID = input.nextInt();
-                    //showSubscriptionHistory(cuID);
+                    showSubscriptionHistory(cuID);
                     break;
                 case 3:
-                    displayCustomersInMonthOrDay(getUserDate(input));
+                    displayCustomersInDate(input);
                     break;
                 case 4:
                     System.out.println("Enter the Coach's ID: ");
@@ -370,7 +448,7 @@ public abstract class Admin extends Person{
                     displayCoachCustomers(coID);
                     break;
                 case 5:
-                    //displayGymIncome(getUserDate(input));
+                    displayGymIncome(input);
                     break;
                 case 6:
                     displaySortedCoaches();
@@ -385,7 +463,7 @@ public abstract class Admin extends Person{
         }
     }
 
-    private void manageObjects(Scanner input) {
+    private static void manageObjects(Scanner input) {
         System.out.println("Choose an action:");
         System.out.println("1. Add Coach");
         System.out.println("2. Edit Coach");
@@ -403,7 +481,6 @@ public abstract class Admin extends Person{
 
         switch (choice) {
             case 1:
-                System.out.println("En");
                 addCoach(input);
                 break;
             case 2:
@@ -426,10 +503,11 @@ public abstract class Admin extends Person{
                 deleteCustomer(input.nextInt());
                 break;
             case 7:
-                Gym.sportsEquipment.add(Equipment.addEquipment(input));
+                addEquipment(input);
                 break;
             case 8:
-                // TODO editEquipment();
+                System.out.println("Enter the Equipment Code: ");
+                editEquipment(input.nextInt(), input);
                 break;
             case 9:
                 System.out.println("Enter the Equipment's Code: ");
@@ -443,15 +521,15 @@ public abstract class Admin extends Person{
         }
     }
 
-    
-       
-    public void display(){
-        System.out.println("Admin Info");
-        System.out.println("Name: "+Name);
-        System.out.println("ID:"+this.getID());
-        System.out.println("Gender: " + Gender);
-        System.out.println("Phone_number: "+ Phone_number);
+    public static void registerUser(String role, Scanner input){
+        switch(role){
+            case "Customer":
+                addCustomer(input);
+            case "Coach":
+                addCoach(input);
+            default:
+                System.out.println("Invalid Choice. Outtt");
+        }
     }
-    
-    
+
 }

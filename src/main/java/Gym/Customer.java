@@ -14,40 +14,43 @@ public class Customer extends Person {
     Gym gym;
     Subscription subscription;
     int coachID;
-    ArrayList<InBody> List_of_inbodies = new ArrayList<>();
+    public ArrayList<InBody> List_of_inbodies = new ArrayList<>();
 
     public Customer(int coachID, Gym gym){
         super();
         this.coachID = coachID;
         this.gym = gym;
     }
-    
+
     public Customer(String Name , int ID , String Gender ,String Address,
-            int Phone_number, String E_mail, int coachID){
-        super(Name, ID, Gender, Address, Phone_number, E_mail);
+                    int Phone_number, String E_mail, int coachID, String password){
+        super(Name, ID, Gender, Address, Phone_number, E_mail, password);
         this.coachID = coachID;
     }
     public Customer(String Name , int ID , String Gender ,String Address,
-                    int Phone_number, String E_mail, int coachID,Subscription sub){
-        super(Name, ID, Gender, Address, Phone_number, E_mail);
+                    int Phone_number, String E_mail, int coachID,Subscription sub, String password){
+        super(Name, ID, Gender, Address, Phone_number, E_mail, password);
         this.coachID = coachID;
         this.subscription = sub;
     }
-    
+
     public Customer(Customer customer){
-        super(customer.Name, customer.getID(), customer.Gender, customer.getAdress(),
-                customer.Phone_number, customer.E_mail);
+        super(customer.Name, customer.getID(), customer.Gender, customer.getAddress(),
+                customer.Phone_number, customer.E_mail, customer.getPassword());
         this.coachID = customer.coachID;
         this.gym = customer.gym;
         this.subscription = customer.subscription;
     }
-    
-      
+
+    public int getCoachID() {
+        return coachID;
+    }
+
     void display (){
         System.out.println("Name: "+Name);
         System.out.println("ID:"+this.getID());
         System.out.println("Gender: "+Gender);
-        System.out.println("Adress: "+this.getAdress());
+        System.out.println("Adress: "+this.getAddress());
         System.out.println("Phone_number: "+Phone_number);
         System.out.println("E_mail: "+E_mail);
         /*
@@ -74,12 +77,12 @@ public class Customer extends Person {
         }
     }
 
-    
+
     // Display coach info
     void displayCoachInfo(){
         Gym.listOfCoaches.get(this.coachID).display();
     }
-    
+
     // Display all Gym Equipment
     void displayGymEquipment(){
         for(Equipment eq : Gym.sportsEquipment){
@@ -87,23 +90,22 @@ public class Customer extends Person {
             System.out.println("-------");
         }
     }
-    
+
     // Display membership plan details
     void displayMembershipPlan(){
         this.subscription.getMembershipPlan().display();
     }
-    
+
     // Display inbody info at a specific date
     void displayInBodyAtDate(java.util.Date date){
         addInBody();
-        System.out.println(this.List_of_inbodies.toArray().length);
         for(InBody in : this.List_of_inbodies){
             if(in.date.equals(date)){
                 in.Display();
             }
         }
     }
-    
+
     // Display how many kilos need to be reduced according to his body
     void displayHowManyKilosToReduce(){
         addInBody();
@@ -147,9 +149,8 @@ public class Customer extends Person {
         this.E_mail = E_mail;
     }
 
-    public void readScenario() {
-        Scanner scanner = new Scanner(System.in);
 
+    public void readScenario(Scanner scanner) {
         while (true) {
             System.out.println("\nCustomer Functionalities: (Choose the Corresponding number)");
             System.out.println("1. Get his coach info (Name, Phone number, working hours)");
@@ -161,7 +162,7 @@ public class Customer extends Person {
 
             System.out.print("Enter your choice: ");
             int choice = scanner.nextInt();
-            System.out.println("");
+            scanner.nextLine();
 
             switch (choice) {
                 case 1:

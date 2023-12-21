@@ -42,5 +42,12 @@ public class Gym {
         this.phoneNumber = phoneNumber;
     }
 
-
+    public static Coach getCoachWithID(int coachID) {
+        for (Coach coach: Gym.listOfCoaches) {
+            if (coach.getID() == coachID) {
+                return coach;
+            }
+        }
+        return null;
+    }
 }

@@ -1,6 +1,7 @@
 package Gym;
 
 import java.sql.SQLOutput;
+import java.util.List;
 import java.util.Scanner;
 import java.util.ArrayList;
 
@@ -8,25 +9,25 @@ import static Main.Main.inBodyList;
 
 public class Coach extends Person implements Comparable<Coach> {
     int working_hours;
-    int number_of_customers;
+    public int number_of_customers;
     public ArrayList<Customer> List_of_customers = new ArrayList<>();
 
 
-    public Coach(String Name , int ID , String Gender ,String Adress ,int Phone_number, String E_mail, int W_H){
-        super(Name, ID, Gender, Adress, Phone_number, E_mail);
+    public Coach(String Name , int ID , String Gender ,String Adress ,int Phone_number, String E_mail, int W_H, String password){
+        super(Name, ID, Gender, Adress, Phone_number, E_mail, password);
         this.working_hours = W_H;
         this.number_of_customers = 0;
     }
 
     public Coach(){
-        this("",0,"","",0,"",0);
+        this("",0,"","",0,"",0, "");
     }
-    
+
     public Coach(Coach coach){
-        super(coach.getName(), coach.getID(), coach.getGender(), coach.getAdress(),
-                coach.getPhone_number(), coach.getE_mail());
+        super(coach.getName(), coach.getID(), coach.getGender(), coach.getAddress(),
+                coach.getPhone_number(), coach.getE_mail(), coach.getPassword());
         this.working_hours = coach.working_hours;
-        
+
     }
     public void addCustomerToCoach()
     {
@@ -41,7 +42,7 @@ public class Coach extends Person implements Comparable<Coach> {
         System.out.println("Name: "+Name);
         System.out.println("ID:"+this.getID());
         System.out.println("Gender: " + Gender);
-        System.out.println("Address: "+this.getAdress());
+        System.out.println("Address: "+this.getAddress());
         System.out.println("Phone_number: "+Phone_number);
         System.out.println("E_mail: "+E_mail);
         System.out.println("Working Hours: "+working_hours);
@@ -72,9 +73,9 @@ public class Coach extends Person implements Comparable<Coach> {
             else {
                 break;
             }
-         }
+        }
     }
-    
+
     void show_customers (){
         for (Customer cu: Gym.listOfCustomers){
             int i =1 ;
@@ -83,43 +84,43 @@ public class Coach extends Person implements Comparable<Coach> {
             System.out.println("-------");
             i++;
         }
-     }
-    
+    }
+
     void show_list_of_inbodies (Customer cus){
         cus.addInBody();
-         for (InBody in : cus.List_of_inbodies){         
-             in.Display();     
-         }
-     }
-     
-    void show_details_of_Customer (String name){
-        System.out.println("Length: " + Gym.listOfCustomers.toArray().length);
-         for (Customer cu: Gym.listOfCustomers){
-             if(cu.getName().equals(name)) {
-                 cu.display();
-                 System.out.println("------------");
-             }
+        //boolean check=false;
+        for (InBody in : cus.List_of_inbodies){
+            in.Display();
         }
     }
-    
+
+    void show_details_of_Customer (String name){
+        for (Customer cu: Gym.listOfCustomers){
+            if(cu.getName().equals(name)) {
+                cu.display();
+                System.out.println("------------");
+            }
+        }
+    }
+
     void show_details_of_Customer_gender (String gender){
         addCustomerToCoach();
-        System.out.println(this.List_of_customers.toArray().length);
+        // Array
         for (Customer cu: this.List_of_customers){
-            int i =1 ;
+            int i =1;
             if(gender.equals(cu.Gender) ){
-               System.out.println("\t\tcustomer 1");  
+                System.out.println("\t\tcustomer 1");
                 cu.display();
                 i++;
             }
         }
     }
-    
+
     //@override: Comparing descendingly
-    public int compareTo(Coach compareCoach){
-        int com = ((Coach)compareCoach).number_of_customers;
-        
-        return com-this.number_of_customers;
+    @Override public int compareTo(Coach compareCoach){
+        int com = ((Coach)compareCoach).List_of_customers.toArray().length;
+
+        return com-this.List_of_customers.toArray().length;
     }
 
     public int getWorking_hours() {
@@ -146,9 +147,7 @@ public class Coach extends Person implements Comparable<Coach> {
         this.E_mail = E_mail;
     }
 
-    public void readScenario() {
-        Scanner scanner = new Scanner(System.in);
-
+    public void readScenario(Scanner scanner) {
         while (true) {
             System.out.println("\nCoach Functionalities: (Enter the corresponding number)");
             System.out.println("1. Show a list of all his customers.");
@@ -173,8 +172,9 @@ public class Coach extends Person implements Comparable<Coach> {
                     System.out.print("\nEnter customer name to get inbody history: ");
                     String customerName = scanner.nextLine();
                     System.out.println(List_of_customers.toArray().length);
-                    for (Customer customer : Gym.listOfCustomers) {
+                    for (Customer customer : List_of_customers) {
                         if (customerName.equals(customer.getName())) {
+                            customer.addInBody();
                             System.out.println("\nInBody History of " + customerName + ":");
                             show_list_of_inbodies(customer);
                             break;
@@ -201,7 +201,7 @@ public class Coach extends Person implements Comparable<Coach> {
             }
         }
     }
-    
-    
+
+
 
 }

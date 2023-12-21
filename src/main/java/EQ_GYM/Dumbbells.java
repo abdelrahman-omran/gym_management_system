@@ -4,7 +4,7 @@ public class Dumbbells extends Equipment{
     double weight;
 
 
-    Dumbbells(){
+Dumbbells(){
     super("Dummbbels");
 }
     public Dumbbells(String name,int quantity,int code){

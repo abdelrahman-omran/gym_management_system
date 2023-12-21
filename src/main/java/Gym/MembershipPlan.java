@@ -5,19 +5,23 @@ import java.util.Date;
 public class MembershipPlan {
     String member_name;
     Date start_date = null ;
-    //int numberOfMonths;
-    //Date end_date = new Date();
+    int numberOfMonths;
+    Date end_date = new Date();
     final float price_of_month = 300;
     int number_of_plan;
     //
 
-    public MembershipPlan (String member_name,  Date start_date, int number_of_plan){
+    public MembershipPlan (String member_name,  Date start_date, int noOfMonths, int number_of_plan){
         this.member_name = member_name;
         this.start_date = start_date;
+        this.numberOfMonths = noOfMonths;
         this.number_of_plan =number_of_plan;
+        long durationInMillis = this.numberOfMonths * 30L * 24L * 60L * 60L * 1000L; // Convert months to milliseconds
+        this.end_date = new Date(start_date.getTime() + durationInMillis);
 
     }
-    public MembershipPlan (Date start_date, int number_of_plan){
+    public MembershipPlan (String member_name, Date start_date, int number_of_plan){
+        this.member_name = member_name;
         this.start_date = start_date;
         this.number_of_plan =number_of_plan;
 
@@ -34,39 +38,14 @@ public class MembershipPlan {
     }*/
     //
 
-    /*public boolean check_is_active (Date day_date, Date end_date){
-        boolean check = true ;
-        if (end_date.year==day_date.year){
-            if (end_date.month== day_date.month){ // 1
-                if (end_date.day==day_date.day){ // 2
-                    return true;
-                }
-                else if (end_date.day > day_date.day){
-                    return true;
-                }
-                else if (end_date.day < day_date.day){
-                    return  false ;
-                }
-            } // month
-            else if (end_date.month> day_date.month) { // 1 year
-                return true;
-            }
-            else if (end_date.month < day_date.month) {
-                return false;
-            }
-        }
+    public boolean check_is_active (Date day_date){
+        return !day_date.after(this.end_date);
 
-        else if(end_date.year > day_date.year){
-            return true;
-        }
-        else if (end_date.year < day_date.year){
-            return false;
-        }
+    }
 
-        return false;
-    }*/
-
-    /*public void updtate_member (Date end_date ,boolean ch ,Date day_date ){
+    /*public void update_member (Date end_date ,boolean ch ,Date day_date ){
+        long durationInMillis = this.numberOfMonths * 30L * 24L * 60L * 60L * 1000L; // Convert months to milliseconds
+        Date endDate = new Date(start_date.getTime() + durationInMillis);
         boolean check = false ;
         if(ch==false){
             switch (number_of_plan){
@@ -154,29 +133,45 @@ public class MembershipPlan {
             case 1:
                 price_member =price_of_month ; // 1month                        300
                 break;
-                case 2:
+            case 2:
                 price_member =price_of_month * 2 ; // 2 month                   600
                 break;
-                case 3:
-                    price_member =price_of_month * (8/3); // 3 month            800
-                    break;
-                case 4 :
-                    price_member = price_of_month * (16/3) ; // 6 month         1600
-                    break;
-                case 5 :
-                    price_member = price_of_month * 10 ; // 1 year              3000
-                    break;
+            case 3:
+                price_member =price_of_month * (8/3); // 3 month            800
+                break;
+            case 4 :
+                price_member = price_of_month * (16/3) ; // 6 month         1600
+                break;
+            case 5 :
+                price_member = price_of_month * 10 ; // 1 year              3000
+                break;
             default:
                 System.out.println("any way case ");
                 break;
-            }
+        }
 
-            return price_member ;
+        return price_member ;
+    }
+
+    public String getMember_name() {
+        return member_name;
+    }
+
+    public Date getStart_date() {
+        return start_date;
+    }
+
+    public int getNumberOfMonths() {
+        return numberOfMonths;
+    }
+
+    public int getNumber_of_plan() {
+        return number_of_plan;
     }
 
     public  void display () {
-        //System.out.println("Name: " + member_name);
+        System.out.println("Name: " + member_name);
         System.out.println("Number of plan: " + number_of_plan);
-        System.out.println("Day: " + start_date.getDay()+"\tmonth: " + start_date.getDate()+"\tYear: " + start_date.getYear());
+        System.out.println("Day: " + Integer.valueOf(start_date.getDay()+1)+"\tmonth: " + Integer.valueOf(start_date.getMonth()+1)+"\tYear: " + Integer.valueOf(start_date.getYear()+1900));
     }
 }
